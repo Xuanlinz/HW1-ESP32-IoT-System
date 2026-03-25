@@ -51,7 +51,7 @@ Create and run a **local AIoT demonstration system** consisting of:
 |-------|--------|
 | `GET /health` | ✅ `200 {"status":"ok","service":"aiot-flask"}` |
 | DB inserts | ✅ 4 rows in `sensors` table with correct schema |
-| Streamlit startup | ✅ `200 OK` on `http://localhost:8501` |
+| Streamlit startup | ✅ `200 OK` |
 | Errors encountered | None |
 
 ### Live URLs
@@ -60,7 +60,7 @@ Create and run a **local AIoT demonstration system** consisting of:
 |---------|-----|
 | Flask API | http://127.0.0.1:5000 |
 | Health Check | http://127.0.0.1:5000/health |
-| Streamlit Dashboard | http://localhost:8501 |
+
 
 ### Rerun Commands
 
