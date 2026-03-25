@@ -12,7 +12,7 @@ All components share the same backend and frontend, making the system **modular,
 
 ## 🌟 Live Demo
 
-👉 **https://l7fhemzvwjudcbosk5xndt.streamlit.app/**
+👉 **(https://xuanlinz.github.io/HW1-ESP32-IoT-System/)**
 
 ---
 
