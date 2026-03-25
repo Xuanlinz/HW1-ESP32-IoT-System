@@ -10,7 +10,7 @@ All components share the same backend and frontend, making the system **modular,
 
 ---
 
-## 🟢 Live Demo
+## 🌟 Live Demo
 
 👉 **https://l7fhemzvwjudcbosk5xndt.streamlit.app/**
 
