@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌍 動態 AIoT 監測儀表板</title>
+    <title>🌍 AIoT Sensor Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -27,7 +27,7 @@
         h1 { font-size: 2rem; margin-bottom: 5px; }
         p.subtitle { color: var(--text-muted); margin-bottom: 30px; }
         
-        /* KPI 卡片區塊設定 */
+        
         .kpi-row {
             display: flex;
             gap: 20px;
@@ -43,11 +43,11 @@
         .kpi-title { font-size: 1rem; color: var(--text-muted); margin-bottom: 10px; }
         .kpi-value { font-size: 2rem; font-weight: bold; margin: 0; }
         .kpi-delta { font-size: 0.9rem; margin-top: 5px; font-weight: bold; }
-        .delta-up { color: #09ab3b; }   /* 綠色代表上升 */
-        .delta-down { color: #ff2b2b; } /* 紅色代表下降 */
+        .delta-up { color: #09ab3b; }   
+        .delta-down { color: #ff2b2b; } 
         .delta-neutral { color: var(--text-muted); }
 
-        /* 圖表與表格區塊設定 */
+        
         .chart-container, .table-container {
             background: var(--card-bg);
             padding: 20px;
@@ -70,40 +70,35 @@
 <body>
 
 <div class="container">
-    <h1>🌍 即時 AIoT 監測儀表板 (純前端版本)</h1>
-    <p class="subtitle">這是一個每秒自動更新的動態儀表板。資料總共 200 筆，播完後會自動從頭循環。</p>
+    <h1>🌍 AIoT Sensor Dashboard</h1>
+    <p class="subtitle">This is a dynamic dashboard that updates automatically every second and will automatically loop from the beginning after it finishes playing.</p>
 
     <div class="kpi-row">
         <div class="kpi-card">
-            <div class="kpi-title">🌡️ 目前溫度</div>
+            <div class="kpi-title">🌡️ Latest Temp</div>
             <div class="kpi-value" id="temp-val">-- °C</div>
             <div class="kpi-delta" id="temp-delta">--</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-title">💧 目前濕度</div>
+            <div class="kpi-title">💧 Latest humidity</div>
             <div class="kpi-value" id="hum-val">-- %</div>
             <div class="kpi-delta" id="hum-delta">--</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-title">🔄 資料播放進度</div>
-            <div class="kpi-value" id="step-val">第 0 筆</div>
-            <div class="kpi-delta delta-neutral">共 200 筆循環</div>
         </div>
     </div>
 
     <div class="chart-container">
-        <h3>📈 即時溫濕度趨勢圖 (最近 50 筆)</h3>
+        <h3>📈 Real-time temperature and humidity trend chart (last 50 records)</h3>
         <canvas id="myChart" height="100"></canvas>
     </div>
 
     <div class="table-container">
-        <h3>📋 最新原始數據 (前 5 筆)</h3>
+        <h3>📋 Latest raw data (first 5 records)</h3>
         <table>
             <thead>
                 <tr>
-                    <th>時間</th>
-                    <th>溫度 (°C)</th>
-                    <th>濕度 (%)</th>
+                    <th>Time</th>
+                    <th>Temperature(°C)</th>
+                    <th>Humidity(%)</th>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -113,39 +108,39 @@
 </div>
 
 <script>
-    // 1. 預先準備 200 筆模擬資料 (加入正弦波與隨機擾動)
+    
     const totalDataPoints = 200;
     const windowSize = 50;
     const tempData = [];
     const humData = [];
     
     for (let i = 0; i < totalDataPoints; i++) {
-        // 模擬溫度：25度上下波動
+       
         let temp = 25 + Math.sin(i * 0.1) * 3 + (Math.random() - 0.5);
-        // 模擬濕度：60%上下波動
+        
         let hum = 60 + Math.cos(i * 0.1) * 10 + (Math.random() - 0.5) * 3;
         tempData.push(temp.toFixed(1));
         humData.push(hum.toFixed(1));
     }
 
-    // 2. 初始化 Chart.js 圖表
+    
     const ctx = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: Array(windowSize).fill(''), // X軸標籤暫時留空
+            labels: Array(windowSize).fill(''), 
             datasets: [
                 {
-                    label: '溫度 (°C)',
-                    borderColor: '#ff4b4b', // 紅色
+                    label: 'Temperature(°C)',
+                    borderColor: '#ff4b4b', 
                     backgroundColor: 'rgba(255, 75, 75, 0.1)',
                     data: [],
                     tension: 0.4,
                     fill: true
                 },
                 {
-                    label: '濕度 (%)',
-                    borderColor: '#1f77b4', // 藍色
+                    label: 'Humidity(%)',
+                    borderColor: '#1f77b4', 
                     backgroundColor: 'rgba(31, 119, 180, 0.1)',
                     data: [],
                     tension: 0.4,
@@ -155,46 +150,45 @@
         },
         options: {
             responsive: true,
-            animation: { duration: 400 }, // 設定動畫過渡時間
+            animation: { duration: 400 }, 
             scales: {
                 y: { beginAtZero: false }
             }
         }
     });
 
-    // 3. 核心邏輯：每秒更新畫面的函數
+    
     let step = 0;
 
     function updateDashboard() {
         const idx = step % totalDataPoints;
         
-        // --- 準備圖表需要的滑動視窗資料 ---
+        
         let displayTemp = [];
         let displayHum = [];
         let displayLabels = [];
 
         for (let i = 0; i < windowSize; i++) {
-            // 計算當下要抓取的索引 (處理循環邏輯)
+            
             let dataIdx = (idx - windowSize + i + 1 + totalDataPoints) % totalDataPoints;
             displayTemp.push(tempData[dataIdx]);
             displayHum.push(humData[dataIdx]);
             
-            // 產生假的時間標籤
             let d = new Date();
             d.setSeconds(d.getSeconds() - (windowSize - i - 1));
             displayLabels.push(d.toLocaleTimeString('zh-TW', {hour12: false}));
         }
 
-        // --- 更新圖表 ---
+        
         myChart.data.labels = displayLabels;
         myChart.data.datasets[0].data = displayTemp;
         myChart.data.datasets[1].data = displayHum;
         myChart.update();
 
-        // --- 更新 KPI 卡片 ---
+        
         const latestTemp = parseFloat(tempData[idx]);
         const latestHum = parseFloat(humData[idx]);
-        // 取得前一筆資料計算差值
+       
         const prevIdx = (idx - 1 + totalDataPoints) % totalDataPoints;
         const prevTemp = parseFloat(tempData[prevIdx]);
         const prevHum = parseFloat(humData[prevIdx]);
@@ -204,19 +198,17 @@
 
         document.getElementById('temp-val').innerText = `${latestTemp.toFixed(1)} °C`;
         document.getElementById('hum-val').innerText = `${latestHum.toFixed(1)} %`;
-        document.getElementById('step-val').innerText = `第 ${idx + 1} 筆`;
 
-        // 設定溫度的增減顏色與箭頭
+
+       
         const tempDeltaEl = document.getElementById('temp-delta');
         tempDeltaEl.innerText = tempDiff >= 0 ? `▲ ${tempDiff} °C` : `▼ ${Math.abs(tempDiff)} °C`;
-        tempDeltaEl.className = `kpi-delta ${tempDiff >= 0 ? 'delta-down' : 'delta-up'}`; // 溫度升高變紅，降低變綠
+        tempDeltaEl.className = `kpi-delta ${tempDiff >= 0 ? 'delta-down' : 'delta-up'}`; 
 
-        // 設定濕度的增減顏色與箭頭
         const humDeltaEl = document.getElementById('hum-delta');
         humDeltaEl.innerText = humDiff >= 0 ? `▲ ${humDiff} %` : `▼ ${Math.abs(humDiff)} %`;
-        humDeltaEl.className = `kpi-delta ${humDiff >= 0 ? 'delta-up' : 'delta-down'}`; // 濕度增加變綠，減少變紅
+        humDeltaEl.className = `kpi-delta ${humDiff >= 0 ? 'delta-up' : 'delta-down'}`; 
 
-        // --- 更新表格 (顯示最新 5 筆) ---
         let tableHTML = "";
         for (let i = 0; i < 5; i++) {
             let rowIdx = (idx - i + totalDataPoints) % totalDataPoints;
@@ -230,12 +222,10 @@
         }
         document.getElementById('table-body').innerHTML = tableHTML;
 
-        // 步數加 1
         step++;
     }
 
-    // 4. 啟動定時器，每 1000 毫秒 (1秒) 執行一次 updateDashboard
-    updateDashboard(); // 先執行第一次避免畫面空白
+    updateDashboard(); 
     setInterval(updateDashboard, 1000);
 
 </script>
