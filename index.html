@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,6 @@
         h1 { font-size: 2rem; margin-bottom: 5px; }
         p.subtitle { color: var(--text-muted); margin-bottom: 30px; }
         
-        
         .kpi-row {
             display: flex;
             gap: 20px;
@@ -47,7 +46,6 @@
         .delta-down { color: #ff2b2b; } 
         .delta-neutral { color: var(--text-muted); }
 
-        
         .chart-container, .table-container {
             background: var(--card-bg);
             padding: 20px;
@@ -75,55 +73,51 @@
 
     <div class="kpi-row">
         <div class="kpi-card">
-            <div class="kpi-title">🌡️ Latest Temp</div>
+            <div class="kpi-title">🌡️ Latest Temperature</div>
             <div class="kpi-value" id="temp-val">-- °C</div>
             <div class="kpi-delta" id="temp-delta">--</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-title">💧 Latest humidity</div>
+            <div class="kpi-title">💧 Latest Humidity</div>
             <div class="kpi-value" id="hum-val">-- %</div>
             <div class="kpi-delta" id="hum-delta">--</div>
         </div>
     </div>
 
     <div class="chart-container">
-        <h3>📈 Real-time temperature and humidity trend chart (last 50 records)</h3>
+        <h3>📈 Real-Time Temperature and Humidity Trend Chart (Last 50 Records)</h3>
         <canvas id="myChart" height="100"></canvas>
     </div>
 
     <div class="table-container">
-        <h3>📋 Latest raw data (first 5 records)</h3>
+        <h3>📋 Latest Raw Data (First 5 Records)</h3>
         <table>
             <thead>
                 <tr>
                     <th>Time</th>
-                    <th>Temperature(°C)</th>
-                    <th>Humidity(%)</th>
+                    <th>Temperature (°C)</th>
+                    <th>Humidity (%)</th>
                 </tr>
             </thead>
             <tbody id="table-body">
-                </tbody>
+            </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    
     const totalDataPoints = 200;
     const windowSize = 50;
     const tempData = [];
     const humData = [];
     
     for (let i = 0; i < totalDataPoints; i++) {
-       
         let temp = 25 + Math.sin(i * 0.1) * 3 + (Math.random() - 0.5);
-        
         let hum = 60 + Math.cos(i * 0.1) * 10 + (Math.random() - 0.5) * 3;
         tempData.push(temp.toFixed(1));
         humData.push(hum.toFixed(1));
     }
 
-    
     const ctx = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'line',
@@ -131,7 +125,7 @@
             labels: Array(windowSize).fill(''), 
             datasets: [
                 {
-                    label: 'Temperature(°C)',
+                    label: 'Temperature (°C)',
                     borderColor: '#ff4b4b', 
                     backgroundColor: 'rgba(255, 75, 75, 0.1)',
                     data: [],
@@ -139,7 +133,7 @@
                     fill: true
                 },
                 {
-                    label: 'Humidity(%)',
+                    label: 'Humidity (%)',
                     borderColor: '#1f77b4', 
                     backgroundColor: 'rgba(31, 119, 180, 0.1)',
                     data: [],
@@ -157,35 +151,30 @@
         }
     });
 
-    
     let step = 0;
 
     function updateDashboard() {
         const idx = step % totalDataPoints;
-        
         
         let displayTemp = [];
         let displayHum = [];
         let displayLabels = [];
 
         for (let i = 0; i < windowSize; i++) {
-            
             let dataIdx = (idx - windowSize + i + 1 + totalDataPoints) % totalDataPoints;
             displayTemp.push(tempData[dataIdx]);
             displayHum.push(humData[dataIdx]);
             
             let d = new Date();
             d.setSeconds(d.getSeconds() - (windowSize - i - 1));
-            displayLabels.push(d.toLocaleTimeString('zh-TW', {hour12: false}));
+            displayLabels.push(d.toLocaleTimeString('en-US', {hour12: false}));
         }
 
-        
         myChart.data.labels = displayLabels;
         myChart.data.datasets[0].data = displayTemp;
         myChart.data.datasets[1].data = displayHum;
         myChart.update();
 
-        
         const latestTemp = parseFloat(tempData[idx]);
         const latestHum = parseFloat(humData[idx]);
        
@@ -199,8 +188,6 @@
         document.getElementById('temp-val').innerText = `${latestTemp.toFixed(1)} °C`;
         document.getElementById('hum-val').innerText = `${latestHum.toFixed(1)} %`;
 
-
-       
         const tempDeltaEl = document.getElementById('temp-delta');
         tempDeltaEl.innerText = tempDiff >= 0 ? `▲ ${tempDiff} °C` : `▼ ${Math.abs(tempDiff)} °C`;
         tempDeltaEl.className = `kpi-delta ${tempDiff >= 0 ? 'delta-down' : 'delta-up'}`; 
