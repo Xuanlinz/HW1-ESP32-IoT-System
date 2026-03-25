@@ -61,7 +61,6 @@ Create and run a **local AIoT demonstration system** consisting of:
 | Flask API | http://127.0.0.1:5000 |
 | Health Check | http://127.0.0.1:5000/health |
 
-
 ### Rerun Commands
 
 All commands run from `c:\Users\user\Documents\IOT`:
