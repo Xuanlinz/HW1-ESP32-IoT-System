@@ -560,7 +560,7 @@ python dht11_sim.py
 |-------|-------|
 | **Date** | 2026-03-24 10:40 (UTC+8) |
 | **File** | `c:\Users\user\Documents\DIC4\dashboard.py` |
-| **URL** | http://localhost:8502 |
+
 
 ### Features
 
@@ -569,7 +569,7 @@ python dht11_sim.py
 - **Humidity line chart** — Cyan line (#06b6d4)
 - **Combined chart** — Both metrics overlaid for comparison
 - **Data table** — Recent sensor readings with all columns
-- **Auto-refresh** — Every 3 seconds
+- **Auto-refresh** — Every second
 
 ### Dependencies Installed
 
@@ -591,7 +591,7 @@ python -m streamlit run dashboard.py --server.headless true --server.port 8502
 
 ### Verification
 
-- Dashboard fully loaded at http://localhost:8502
+- Dashboard fully loaded 
 - KPI cards displaying correctly
 - All 3 charts rendering live data (380+ rows at time of test)
 - Data table showing sensor readings with timestamps
